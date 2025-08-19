@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ZAMAZAMA Store - Hardware Store</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+
+    /* ===== Login Page Styles ===== */
+    #loginPage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #004aad; /* Cashbuild blue-ish */
+      color: white;
+      padding: 20px;
+    }
+
+    #loginPage .login-container {
+      background: white;
+      color: #333;
+      padding: 2.5rem 3rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      width: 320px;
+    }
+
+    #loginPage h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #004aad;
+    }
+
+    #loginPage label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    #loginPage input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1.2rem;
+      border-radius: 5px;
+      border: 1.5px solid #ccc;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    #loginPage input:focus {
+      border-color: #004aad;
+      outline: none;
+    }
+
+    #loginPage button {
+      width: 100%;
+      background: #004aad;
+      color: white;
+      padding: 0.7rem;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #loginPage button:hover {
+      background: #002f6c;
+    }
+
+    #loginError {
+      color: #d93025;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+    body { font-family: Arial, sans-serif; color: #333; }
+  
+  /* Header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #005f7f;
+    color: #f4f4f4;
+  }
+  header .logo { font-size: 1.5rem; font-weight: bold; }
+  nav a {
+    margin: 0 0.8rem;
+    text-decoration: none;
+    color: #f4f4f4;
+  }
+  nav a:hover { text-decoration: underline; }
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+  #search {
+    padding: 0.4rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    margin-right: 1rem;
+  }
+
+    /* ===== Store Page Styles ===== */
+    #storePage {
+      display: none;
+      min-height: 100vh;
+      background: #f8f9fa;
+      padding-bottom: 2rem;
+    }
+
+    /* Navigation Bar */
+    nav {
+      background: #004aad;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 3rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.7rem;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul li {
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li:hover {
+      color: #ffcc00;
+    }
+
+    nav ul li#logoutBtn {
+      color: #ff4c4c;
+    }
+
+    /* Welcome Section */
+    .welcome {
+      padding: 2rem 3rem;
+      text-align: center;
+      background: white;
+      margin: 2rem auto;
+      max-width: 1000px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .welcome h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #004aad;
+    }
+
+    .welcome p {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    /* Product Section */
+    .products {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+    }
+
+    .product-card img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    .product-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #004aad;
+    }
+
+    .product-card p.description {
+      font-size: 0.9rem;
+      color: #666;
+      flex-grow: 1;
+      margin-bottom: 1rem;
+    }
+
+    .product-card p.price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+
+    .product-card button {
+      background: #ffcc00;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      color: #333;
+    }
+
+    .product-card button:hover {
+      background: #e6b800;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+      .welcome {
+        margin: 1rem;
+        padding: 1rem 1.5rem;
+      }
+      .products {
+        margin: 1rem;
+      }
+    }
+    footer {
+    background: #005f7f;
+    color: #f4f4f4;
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+  }
+  .footer-links h3 { margin-bottom: 0.5rem; }
+  .footer-links a { color: #f4f4f4; text-decoration: none; }
+  .footer-links a:hover { text-decoration: underline; }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .footer-links { flex-direction: column; align-items: center; }
+    nav { display: none; }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <section id="loginPage">
+    <div class="login-container">
+      <h2>Login to ZAMAZAMA </h2>
+      <div id="loginError">Invalid username or password</div>
+      <form id="loginForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" autocomplete="off" required />
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- STORE PAGE -->
+  <section id="storePage">
+    <nav>
+      <div class="logo">ZAMAZAMA HARDWARE STORE</div>
+      <ul>
+        <li id="logoutBtn">Logout</li>
+      </ul>
+    </nav>
+    <body>
+      <header>
+        <div class="logo">ZAMAZAMA hub</div>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Shop</a>
+          <a href="#">About Us</a>
+          <a href="#">Contact</a>
+        </nav>
+        <div class="nav-right">
+          <input type="text" id="search" placeholder="Search products..." />
+          <div class="cart">🛒 <span id="cart-count">0</span></div>
+        </div>
+      </header>
+    <div class="welcome">
+      <h1>Welcome to ZAMAZAMA Hardware Store</h1>
+      <p>Your one-stop shop for quality hardware equipment and building materials.</p>
+    </div>
+
+    <section class="products">
+      <!-- Products will be injected by JS -->
+    </section>
+    <footer>
+      <div class="footer-links">
+        <div>
+          <h3>About</h3>
+          <a href="#">Our Story</a>
+        </div>
+        <div>
+          <h3>Support</h3>
+          <a href="#">Customer Service</a>
+        </div>
+        <div>
+          <h3>Contact</h3>
+          <p>Makhushane zone 3, PHALABORWA</p>
+          <p>Email:Ntsakondhlovu98.com</p>
+          <p>063 410 5559</p>
+          <p>066 875 5315</p>
+        </div>
+      </div>
+      <p>&copy; 2025 Hardware Hub</p>
+    </footer>
+  </section>
+  
+  <script>
+    // Data for products (image URLs are placeholders)
+    const products = [
+      {
+        id: 1,
+        name: 'Heavy Duty Hammer',
+        description: 'A robust hammer for all your construction needs with a comfortable grip.',
+        price: 18.99,
+        image: 'images (5).jpeg'
+      },
+      {
+        id: 2,
+        name: 'Multi-size Screwdriver Set',
+        description: 'Includes flathead and Phillips screwdrivers, perfect for household repairs.',
+        price: 24.50,
+        image: 'images (9).jpeg'
+      },
+      {
+        id: 3,
+        name: 'Adjustable Wrench',
+        description: 'High quality adjustable wrench with rust-resistant finish.',
+        price: 19.75,
+        image: 'images (12).jpeg'
+      },
+      {
+        id: 4,
+        name: 'Cordless Electric Drill',
+        description: 'Powerful drill with variable speed and rechargeable battery.',
+        price: 89.99,
+        image: 'images (6).jpeg'
+      },
+      {
+        id: 5,
+        name: 'Bricks 1m',
+        description: 'Durable for building quality houses etc.',
+        price: 9.99,
+        image: 'images (11).jpeg'
+      },
+      {
+        id: 6,
+        name: 'Safety Work Gloves',
+        description: 'Protect your hands with these comfortable, durable gloves.',
+        price: 7.25,
+        image: 'OIP (2).webp'
+      }
+    ];
+
+    const loginPage = document.getElementById('loginPage');
+    const storePage = document.getElementById('storePage');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const productsContainer = storePage.querySelector('.products');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Hardcoded user for demo
+    const USER = {
+      username: 'admin',
+      password: '1234'
+    };
+
+    // Render products on store page
+    function renderProducts() {
+      productsContainer.innerHTML = '';
+      products.forEach(prod => {
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${prod.image}" alt="${prod.name}" />
+          <h3>${prod.name}</h3>
+          <p class="description">${prod.description}</p>
+          <p class="price">$${prod.price.toFixed(2)}</p>
+          <button onclick="alert('Added \"${prod.name}\" to cart (functionality coming soon)')">Add to Cart</button>
+        `;
+        productsContainer.appendChild(card);
+      });
+    }
+
+    // Show error message for 3 seconds
+    function showError(message) {
+      loginError.textContent = message;
+      loginError.style.display = 'block';
+      setTimeout(() => {
+        loginError.style.display = 'none';
+      }, 3000);
+    }
+
+    // Handle login form submit
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const username = loginForm.username.value.trim();
+      const password = loginForm.password.value;
+
+      if(username === USER.username && password === USER.password) {
+        // Hide login, show store
+        loginPage.style.display = 'none';
+        storePage.style.display = 'block';
+        renderProducts();
+      } else {
+        showError('Invalid username or password');
+      }
+    });
+
+    // Logout button functionality
+    logoutBtn.addEventListener('click', () => {
+      // Clear inputs
+      loginForm.reset();
+      loginPage.style.display = 'flex';
+      storePage.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
